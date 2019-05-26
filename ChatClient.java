@@ -1,3 +1,5 @@
+//
+
 import java.net.*;
 import java.io.*;
 
@@ -13,24 +15,24 @@ public class ChatClient {
 		PrintWriter pw = null;
 		boolean endflag = false;
 		try{
-			sock = new Socket(args[1], 10001);
-			pw = new PrintWriter(new OutputStreamWriter(sock.getOutputStream()));
-			br = new BufferedReader(new InputStreamReader(sock.getInputStream()));
-			BufferedReader keyboard = new BufferedReader(new InputStreamReader(System.in));
+			sock = new Socket(args[1], 10001);//args[1], 10001번 포트로 서버에 접속한다.
+			pw = new PrintWriter(new OutputStreamWriter(sock.getOutputStream()));//메세지를 보낸다
+			br = new BufferedReader(new InputStreamReader(sock.getInputStream()));//메세지를 출력한다
+			BufferedReader keyboard = new BufferedReader(new InputStreamReader(System.in));//키보드로 입력받기 위한 buffered생성
 			// send username.
 			pw.println(args[0]);
 			pw.flush();
-			InputThread it = new InputThread(sock, br);
+			InputThread it = new InputThread(sock, br);//서버로부터 전달된 문자열을 모니터에 출력
 			it.start();
 			String line = null;
 			while((line = keyboard.readLine()) != null){
-				pw.println(line);
+				pw.println(line);//키보드로 입력받은 내용을 보내는 것
 				pw.flush();
 				if(line.equals("/quit")){
 					endflag = true;
 					break;
 				}
-			}
+			}//키보드로부터 한줄씩 받아 메세지를 보낸다. 
 			System.out.println("Connection closed.");
 		}catch(Exception ex){
 			if(!endflag)
@@ -58,7 +60,7 @@ class InputThread extends Thread{
 	public InputThread(Socket sock, BufferedReader br){
 		this.sock = sock;
 		this.br = br;
-	}
+	}//서버로부터 전달 받은 문자열을 모니터에 출력하는 InputThread 객체를 생성하여 BuffereadReader와 Socket 객체를 인자로 전달 받음
 	public void run(){
 		try{
 			String line = null;
